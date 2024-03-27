@@ -1,20 +1,57 @@
-version: 3
+version: "3"
 
-  services:
-    nginx:
-      container_name: "nginx"
-      build: "./requirements/nginx/"
-      env_file: .env
-      ports: 443:443
-    wordpress:
-      container_name: "wordpress"
-      build: "./requirements/wordpress/"
-      env_file: .env
-    mariadb:
-      container_name: "mariadb"
-      build: "./requirements/mariadb"
-      env_file: .env
-      ports: 3306:3306
+networks:
+  inception:
+    name: inception
+    driver: bridge
 
-  volumes:
-    wordpres:
+volumes:
+  wordpress_data:
+    driver: "local"
+    driver_opts:
+      type: none
+      device: /home/mkhairal/data/wordpress
+      o: bind
+  mariadb_data:
+    driver: "local"
+    driver_opts:
+      type: none
+      device: /home/mkhairal/data/mariadb
+      o: bind
+
+services:
+  nginx:
+    container_name: "nginx"
+    build: "./requirements/nginx/"
+    env_file: .env
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+
+  wordpress:
+    container_name: "wordpress"
+    build: "./requirements/wordpress/"
+    env_file: .env
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    expose:
+      - 9000
+    volumes:
+      - wordpress_data:/var/www/html
+
+  mariadb:
+    container_name: "mariadb"
+    build: "./requirements/mariadb"
+    env_file: .env
+    expose:
+      - 3306
+    networks: 
+      - inception
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      
