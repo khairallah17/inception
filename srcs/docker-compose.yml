@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 networks:
   inception:
@@ -6,17 +6,17 @@ networks:
     driver: bridge
 
 volumes:
-  wordpress_data:
+  wordpress_dt:
     driver: "local"
     driver_opts:
       type: none
-      device: /home/mkhairal/data/wordpress
+      device: "/home/medkhairallah/inception/data/wordpress"
       o: bind
-  mariadb_data:
+  db_data:
     driver: "local"
     driver_opts:
       type: none
-      device: /home/mkhairal/data/mariadb
+      device: "/home/medkhairallah/inception/data/mariadb"
       o: bind
 
 services:
@@ -30,6 +30,9 @@ services:
       - inception
     depends_on:
       - wordpress
+    restart: always
+    volumes:
+      - wordpress_dt:/var/www/html
 
   wordpress:
     container_name: "wordpress"
@@ -42,7 +45,8 @@ services:
     expose:
       - 9000
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress_dt:/var/www/html
+    restart: always
 
   mariadb:
     container_name: "mariadb"
@@ -53,5 +57,6 @@ services:
     networks: 
       - inception
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
+    restart: always
       
