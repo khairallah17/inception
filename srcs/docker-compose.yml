@@ -44,8 +44,6 @@ services:
       - inception
     depends_on:
       - mariadb
-    expose:
-      - 9000
     volumes:
       - wordpress_dt:/var/www/html
     restart: always
@@ -55,8 +53,6 @@ services:
     image: mariadb:${TAG}
     build: "./requirements/mariadb"
     env_file: .env
-    expose:
-      - 3306
     networks: 
       - inception
     volumes:

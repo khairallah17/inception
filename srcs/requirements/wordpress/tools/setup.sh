@@ -12,8 +12,6 @@ chmod +x /usr/local/bin/wp
 sleep 7
 
 wp core download --allow-root
-mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
-rm -rf wp-config.php
 wp core config --allow-root --dbhost=${DB_HOST} --dbname=${DB_NAME} --dbuser=${DB_USER} --dbpass=${DB_PASS}
 wp core install --allow-root --url=${DOMAIN} --admin_user=${WP_ADMIN} --admin_password=${WP_ADMIN_PASS} --title=${WP_TITLE} --admin_email=${WP_ADMIN_EMAIL} --skip-email
 wp user create --allow-root ${WP_USER} ${WP_USER_EMAIL} --role=${WP_ROLE} --user_pass=${WP_USER_PASS}

@@ -6,7 +6,7 @@
 #    By: mkhairal <mkhairal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/29 10:29:03 by mkhairal          #+#    #+#              #
-#    Updated: 2024/03/29 14:02:28 by mkhairal         ###   ########.fr        #
+#    Updated: 2024/03/29 17:38:06 by mkhairal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ create:
 build: create
 	docker-compose -f ./srcs/docker-compose.yml build
 
-up:
+up: build
 	docker-compose -f ./srcs/docker-compose.yml up -d
 
 down:
@@ -28,8 +28,8 @@ down:
 stop:
 	docker-compose -f ./srcs/docker-compose.yml stop
 	
-clean:
-	docker-compose -f ./srcs/docker-compose.yml down
+clean: stop down
+	docker volume rm srcs_db_data srcs_wordpress_dt
 	rm -rf /home/mkhairal/data/wordpress/*
 	rm -rf /home/mkhairal/data/mariadb/*
 	
